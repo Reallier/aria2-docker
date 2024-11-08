@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+  aria2:
+    container_name: aria2container-aria2
+    image: local-build-aria2
+    entrypoint: /usr/local/bin/aria2c
+    command: --conf-path /etc/aria2/aria2.conf
+    volumes:
+      - ${PWD}/config:/etc/aria2
+      # - ${PWD}/aria2-downloads:/downloads
+    network_mode: host
+    restart: always
+
+  ariang:
+    container_name: aria2container-ariang
+    image: local-build-ariang
+    command: --port 6880 --ipv6
+    network_mode: host
+    restart: always
+
+  ofelia:
+    container_name: aria2container-ofelia
+    image: mcuadros/ofelia
+    command: daemon --config=/etc/ofelia/ofelia.ini
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./config:/etc/ofelia
